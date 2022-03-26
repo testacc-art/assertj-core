@@ -12,18 +12,18 @@
  */
 package org.assertj.core.internal.iterators;
 
-import org.assertj.core.api.AssertionInfo;
-import org.assertj.core.internal.IteratorsBaseTest;
-import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.List;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.error.ShouldHaveNext.shouldHaveNext;
 import static org.assertj.core.error.ShouldNotBeNull.shouldNotBeNull;
-import org.assertj.core.internal.Iterators;
 import static org.assertj.core.util.AssertionsUtil.expectAssertionError;
+import static org.assertj.core.util.Lists.newArrayList;
+
+import java.util.Iterator;
+
+import org.assertj.core.api.AssertionInfo;
+import org.assertj.core.internal.Iterators;
+import org.assertj.core.internal.IteratorsBaseTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for <code>{@link Iterators#assertHasNext(AssertionInfo, Iterator)}</code>.
@@ -34,25 +34,21 @@ public class Iterators_assertHasNext_Test extends IteratorsBaseTest {
 
   @Test
   void should_pass_if_iterator_has_next() {
-    // GIVEN
-    List<String> list = List.of("Luke", "Yoda", "Vader");
-    Iterator iterator = list.iterator();
     // WHEN
-    iterator.next();
+    actual.next();
     // THEN
-    iterators.assertHasNext(info, iterator);
+    iterators.assertHasNext(info, actual);
 
   }
 
   @Test
   void should_fail_if_iterator_has_no_next() {
     // GIVEN
-    List<String> list = List.of("Luke");
-    Iterator iterator = list.iterator();
+    actual = newArrayList("Luke").iterator();
 
     // WHEN
-    iterator.next();
-    AssertionError error = expectAssertionError(() -> iterators.assertHasNext(INFO, iterator));
+    actual.next();
+    AssertionError error = expectAssertionError(() -> iterators.assertHasNext(INFO, actual));
 
     // THEN
     assertThat(error).hasMessage(shouldHaveNext().create());
@@ -61,10 +57,10 @@ public class Iterators_assertHasNext_Test extends IteratorsBaseTest {
   @Test
   void should_fail_if_actual_is_null() {
     // GIVEN
-    Iterator iterator = null;
+    actual = null;
 
     // WHEN
-    AssertionError error = expectAssertionError(() -> iterators.assertHasNext(INFO, iterator));
+    AssertionError error = expectAssertionError(() -> iterators.assertHasNext(INFO, actual));
 
     // THEN
     assertThat(error).hasMessage(shouldNotBeNull().create());

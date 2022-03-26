@@ -12,18 +12,17 @@
  */
 package org.assertj.core.internal.objects;
 
-import org.assertj.core.api.AssertionInfo;
-import org.assertj.core.internal.Objects;
-import org.assertj.core.internal.ObjectsBaseTest;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.error.ShouldHaveNoNullFields.shouldHaveNoNullFieldsExcept;
 import static org.assertj.core.test.TestData.someInfo;
 import static org.assertj.core.util.AssertionsUtil.expectAssertionError;
 import static org.assertj.core.util.FailureMessages.actualIsNull;
+import static org.assertj.core.util.Lists.newArrayList;
+
+import org.assertj.core.api.AssertionInfo;
+import org.assertj.core.internal.Objects;
+import org.assertj.core.internal.ObjectsBaseTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for <code>{@link Objects#assertHasNoNullFieldsOrPropertiesExcept(AssertionInfo, Object, String...)}</code>.
@@ -57,11 +56,13 @@ public class Objects_assertHasNoNullFieldsOrPropertiesExcept_Test extends Object
     // GIVEN
     Object actual = new Objects_assertHasNoNullFieldsOrPropertiesExcept_Test.Data();
     String fieldName = "field3";
-    String illegalNullField = "field2";
+    String illegalNullFieldName = "field2";
+
     // WHEN
     AssertionError error = expectAssertionError(() -> objects.assertHasNoNullFieldsOrPropertiesExcept(INFO, actual, fieldName));
     // THEN
-    assertThat(error).hasMessage(shouldHaveNoNullFieldsExcept(actual, List.of(illegalNullField), List.of(fieldName)).create());
+    assertThat(error).hasMessage(shouldHaveNoNullFieldsExcept(actual, newArrayList(illegalNullFieldName),
+                                                              newArrayList(fieldName)).create());
   }
 
   @SuppressWarnings("unused")
